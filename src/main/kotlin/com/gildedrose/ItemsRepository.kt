@@ -12,7 +12,7 @@ interface ItemsRepository {
 
 class DbItemsRepository(dataSource: DataSource) : ItemsRepository {
     private val jdbc = JdbcTemplate(dataSource)
-    private val logger = newLogger(javaClass.simpleName)
+    private val logger = classLogger()
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {
         val rowMapper = RowMapper { resultSet, _ ->

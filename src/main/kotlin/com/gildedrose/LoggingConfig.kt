@@ -21,3 +21,5 @@ class LoggingConfig {
 
 fun newLogger(name: String?): Logger =
     LoggerFactory.getLogger(name)
+
+fun Any.classLogger() = newLogger(javaClass.simpleName)

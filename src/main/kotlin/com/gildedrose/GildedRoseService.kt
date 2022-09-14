@@ -9,7 +9,7 @@ class GildedRoseService(
     private val repository: ItemsRepository,
     private val gildedRose: GildedRose = GildedRose(),
 ) {
-    private val logger = newLogger(javaClass.simpleName)
+    private val logger = classLogger()
 
     fun items(asOfDate: LocalDate): List<Item> {
         logger.info("Loading items for $asOfDate")

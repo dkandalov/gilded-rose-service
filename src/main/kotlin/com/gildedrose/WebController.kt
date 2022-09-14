@@ -29,7 +29,7 @@ class WebController(
     private val config: Config,
     private val gildedRoseService: GildedRoseService,
 ) : HttpHandler {
-    private val logger = newLogger(javaClass.simpleName)
+    private val logger = classLogger()
 
     private val basicAuth = BasicAuth(realm = "") { credentials ->
         credentials.user in config.users && credentials.password == "secret"
