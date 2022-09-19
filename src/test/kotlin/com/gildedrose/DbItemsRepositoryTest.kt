@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 
-@SpringBootTest
-class ItemsRepositoryImplTest {
-    @Autowired
-    private lateinit var jdbcTemplate: JdbcTemplate
-    @Autowired
-    private lateinit var repository: ItemsRepository
+class DbItemsRepositoryTest {
+    private val dataSource = inMemoryDatasource()
+    private val jdbcTemplate = JdbcTemplate(dataSource)
+    private val repository = DbItemsRepository(dataSource)
 
     @BeforeEach
     fun setup() {

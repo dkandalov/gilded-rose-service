@@ -5,10 +5,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
 class GildedRoseRegressionTest {
-    @Autowired
-    private lateinit var gildedRose: GildedRose
+    private val gildedRose = GildedRose()
 
     @Test
     fun `output over 100 days`() {

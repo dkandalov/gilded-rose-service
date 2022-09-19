@@ -10,7 +10,6 @@ data class Item(
     override fun toString() = "$name, $sellIn, $quality"
 }
 
-@Service
 class GildedRose {
 
     fun update(items: List<Item>) {

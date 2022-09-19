@@ -10,21 +10,15 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class WebControllerIntegrationTest {
-    @Autowired
-    private lateinit var template: TestRestTemplate
-    @MockBean
-    private lateinit var itemsRepository: ItemsRepository
+    @Autowired private lateinit var template: TestRestTemplate
+    @MockBean private lateinit var itemsRepository: ItemsRepository
 
     @Test
     fun `get items for a date`() {
@@ -35,7 +29,8 @@ class WebControllerIntegrationTest {
         val response = template.withBasicAuth("testUser", "testUser-pass")
             .getForEntity("/items?date=2021-01-02", String::class.java)
 
-        assertThat(response.body).isEqualTo("""[{"name":"Box","sellIn":1,"quality":2}]""")
+        assertThat(response.body)
+            .isEqualTo("""[{"name":"Box","sellIn":1,"quality":2}]""")
     }
 
     @Test
