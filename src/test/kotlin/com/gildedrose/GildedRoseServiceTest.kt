@@ -7,10 +7,11 @@ import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
+import org.slf4j.LoggerFactory
 
 class GildedRoseServiceTest {
     private val itemsRepository = mock<ItemsRepository>()
-    private val service = GildedRoseService(itemsRepository)
+    private val service = GildedRoseService(itemsRepository, testLogger)
 
     @BeforeEach
     fun setup() {
@@ -29,3 +30,5 @@ class GildedRoseServiceTest {
         assertEquals(listOf(Item("Box", 8, 18)), items)
     }
 }
+
+val testLogger = LoggerFactory.getLogger("testLogger")

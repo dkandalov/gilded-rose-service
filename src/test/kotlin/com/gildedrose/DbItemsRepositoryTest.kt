@@ -1,7 +1,5 @@
 package com.gildedrose
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -11,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 
 
 class DbItemsRepositoryTest {
-    private val dataSource = testDataSource()
+    private val dataSource = loadConfig("test").db.toDataSource()
     private val jdbcTemplate = JdbcTemplate(dataSource)
     private val repository = DbItemsRepository(dataSource)
 
@@ -60,7 +58,3 @@ class DbItemsRepositoryTest {
         )
     }
 }
-
-fun testDataSource() = HikariDataSource(
-    HikariConfig().also { it.jdbcUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1" }
-)

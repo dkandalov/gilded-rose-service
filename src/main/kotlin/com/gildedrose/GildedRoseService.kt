@@ -3,12 +3,11 @@ package com.gildedrose
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class GildedRoseService(
     private val repository: ItemsRepository,
-    private val gildedRose: GildedRose = GildedRose(),
-    private val logger: Logger = LoggerFactory.getLogger("GildedRoseService")
+    private val logger: Logger,
+    private val gildedRose: GildedRose = GildedRose()
 ) {
     fun items(asOfDate: LocalDate): List<Item> {
         logger.info("Loading items for $asOfDate")

@@ -4,25 +4,24 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
-import java.io.FileInputStream
+import org.slf4j.LoggerFactory
+import java.io.File
 import java.util.*
 
 fun main() {
     startApp(loadConfig())
 }
 
-fun startApp(config: Config): AutoCloseable {
-    return WebControllerHttp4k(config)
+fun startApp(config: Config): AutoCloseable =
+    WebController(config, LoggerFactory.getLogger("GildedRose"))
         .asServer(Undertow(config.port))
         .start()
-}
 
 fun loadConfig(env: String? = null): Config {
     val properties = Properties()
     val envPostfix = if (env == null) "" else "-$env"
-    properties.load(FileInputStream("src/main/resources/application$envPostfix.properties"))
+    File("src/main/resources/application$envPostfix.properties").takeIf { it.exists() }?.inputStream()?.let { properties.load(it) }
+    File("src/test/resources/application$envPostfix.properties").takeIf { it.exists() }?.inputStream()?.let { properties.load(it) }
     return Config(
         users = properties["gildedrose.users"].toString().split(","),
         port = properties["server.port"].toString().toInt(),
@@ -34,10 +33,6 @@ fun loadConfig(env: String? = null): Config {
     )
 }
 
-@SpringBootApplication
-class GildedRoseApplication
-
-@ConfigurationProperties(prefix = "gildedrose")
 class Config(
     var users: List<String> = emptyList(),
     var port: Int = 0,
