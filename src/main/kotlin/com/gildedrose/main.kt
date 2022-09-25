@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
 import org.slf4j.LoggerFactory
-import java.io.File
 import java.util.*
 
 fun main() {
@@ -18,10 +17,8 @@ fun startApp(config: Config): AutoCloseable =
         .start()
 
 fun loadConfig(env: String? = null): Config {
-    val properties = Properties()
     val envPostfix = if (env == null) "" else "-$env"
-    File("src/main/resources/application$envPostfix.properties").takeIf { it.exists() }?.inputStream()?.let { properties.load(it) }
-    File("src/test/resources/application$envPostfix.properties").takeIf { it.exists() }?.inputStream()?.let { properties.load(it) }
+    val properties = propertiesFromClasspath("/application$envPostfix.properties")
     return Config(
         users = properties["gildedrose.users"].toString().split(","),
         port = properties["server.port"].toString().toInt(),
@@ -53,3 +50,7 @@ fun DbConfig.toDataSource() =
             it.password = password
         }
     )
+
+private fun propertiesFromClasspath(path: String) = Properties().apply {
+    load(Config::class.java.getResourceAsStream(path))
+}
