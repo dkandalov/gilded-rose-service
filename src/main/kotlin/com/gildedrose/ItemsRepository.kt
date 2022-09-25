@@ -1,18 +1,16 @@
 package com.gildedrose
 
 import kotlinx.datetime.LocalDate
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
-import org.springframework.stereotype.Repository
+import javax.sql.DataSource
 
 interface ItemsRepository {
     fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>>
 }
 
-@Repository
-class ItemsRepositoryImpl : ItemsRepository {
-    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
+class DbItemsRepository(dataSource: DataSource) : ItemsRepository {
+    private val jdbcTemplate = JdbcTemplate(dataSource)
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {
         val rowMapper = RowMapper { resultSet, _ ->
