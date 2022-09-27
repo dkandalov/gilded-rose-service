@@ -4,8 +4,8 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
 
 fun main() {
@@ -15,7 +15,7 @@ fun main() {
 fun startApp(config: Config): AutoCloseable {
     val dataSource = config.db.toDataSource()
     val gildedRoseService = GildedRoseService(DbItemsRepository(dataSource))
-    val server = WebControllerHttp4k(config, gildedRoseService)
+    val server = WebController(config, gildedRoseService)
         .asServer(Undertow(config.port))
         .start()
     return AutoCloseable {
@@ -24,14 +24,10 @@ fun startApp(config: Config): AutoCloseable {
     }
 }
 
-@SpringBootApplication
-class GildedRoseApplication
-
-@ConfigurationProperties(prefix = "gildedrose")
 class Config(
-    var users: List<String> = emptyList(),
-    var port: Int = 0,
-    var db: DbConfig = DbConfig()
+    val users: List<String>,
+    val port: Int,
+    val db: DbConfig
 ) {
     companion object {
         fun load(env: String? = null): Config {
@@ -51,9 +47,9 @@ class Config(
 }
 
 class DbConfig(
-    var url: String = "",
-    var username: String = "",
-    var password: String = ""
+    val url: String,
+    val username: String,
+    val password: String
 )
 
 fun DbConfig.toDataSource() =
@@ -68,3 +64,5 @@ fun DbConfig.toDataSource() =
 private fun propertiesFromClasspath(path: String) = Properties().apply {
     load(Config::class.java.getResourceAsStream(path))
 }
+
+fun defaultLogger(name: String): Logger = LoggerFactory.getLogger(name)
