@@ -25,6 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     implementation("org.http4k:http4k-server-undertow:4.30.8.0")
+    implementation("org.http4k:http4k-format-jackson:4.30.8.0")
     runtimeOnly("org.postgresql:postgresql:42.5.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
