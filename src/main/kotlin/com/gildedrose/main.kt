@@ -7,20 +7,28 @@ import org.http4k.server.asServer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
+import kotlin.concurrent.thread
 
 fun main() {
-    startApp(Config.load())
+    val app = App(Config.load()).start()
+    Runtime.getRuntime().addShutdownHook(thread(start = false) {
+        app.close()
+    })
 }
 
-fun startApp(config: Config): AutoCloseable {
-    val dataSource = config.db.toDataSource()
-    val gildedRoseService = GildedRoseService(DbItemsRepository(dataSource))
-    val server = WebController(config, gildedRoseService)
-        .asServer(Undertow(config.port))
-        .start()
-    return AutoCloseable {
-        server.close()
-        dataSource.close()
+class App(config: Config) {
+    private val dataSource = config.db.toDataSource()
+    private val itemsRepository = DbItemsRepository(dataSource)
+    private val gildedRoseService = GildedRoseService(itemsRepository)
+    private val webController = WebController(config, gildedRoseService)
+    private val server = webController.asServer(Undertow(config.port))
+
+    fun start(): AutoCloseable {
+        server.start()
+        return AutoCloseable {
+            server.close()
+            dataSource.close()
+        }
     }
 }
 

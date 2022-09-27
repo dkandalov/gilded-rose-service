@@ -14,7 +14,7 @@ class IntegrationTest {
     private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
     private val config = Config.load("test")
     private val jdbcTemplate = JdbcTemplate(config.db.toDataSource())
-    private val app = startApp(config)
+    private val app = App(config).start()
 
     @BeforeEach
     fun createTable() {
