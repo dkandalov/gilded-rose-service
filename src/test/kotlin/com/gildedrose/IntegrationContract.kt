@@ -24,12 +24,12 @@ interface IntegrationContract {
 
     @BeforeEach
     fun createTable() {
-        jdbcTemplate.execute("create table Items(name varchar(255), sellIn int, quality int, createdOn varchar(255))")
+        jdbcTemplate.createItemsTable()
     }
 
     @AfterEach
     fun tearDown() {
-        jdbcTemplate.execute("drop table Items")
+        jdbcTemplate.dropItemsTable()
         (jdbcTemplate.dataSource as? Closeable)?.close()
     }
 

@@ -18,12 +18,12 @@ class IntegrationTest {
 
     @BeforeEach
     fun setup() {
-        jdbcTemplate.execute("create table Items(name varchar(255), sellIn int, quality int, createdOn varchar(255))")
+        jdbcTemplate.createItemsTable()
     }
 
     @AfterEach
     fun tearDown() {
-        jdbcTemplate.execute("drop table Items")
+        jdbcTemplate.dropItemsTable()
         app.close()
     }
 
