@@ -2,13 +2,19 @@ package com.gildedrose
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.http4k.server.Undertow
+import org.http4k.server.asServer
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.runApplication
 import java.util.*
 
-fun main(args: Array<String>) {
-    runApplication<GildedRoseApplication>(*args)
+fun main() {
+    val config = Config.load()
+    val dataSource = config.db.toDataSource()
+    val gildedRoseService = GildedRoseService(DbItemsRepository(dataSource))
+    WebControllerHttp4k(config, gildedRoseService)
+        .asServer(Undertow(config.port))
+        .start()
 }
 
 @SpringBootApplication

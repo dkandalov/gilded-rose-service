@@ -30,10 +30,11 @@ import org.springframework.web.bind.annotation.RestController
 
 class WebControllerHttp4k(
     private val config: Config,
-    private val logger: Logger,
     private val gildedRoseService: GildedRoseService =
         GildedRoseService(DbItemsRepository(config.db.toDataSource())),
+    newLogger: (String) -> Logger = ::defaultLogger
 ) : HttpHandler {
+    private val logger = newLogger(javaClass.simpleName)
     private val objectMapper = jacksonObjectMapper()
 
     private val routes = routes(
