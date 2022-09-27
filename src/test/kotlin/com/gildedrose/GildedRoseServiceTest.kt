@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 
 class GildedRoseServiceTest {
     private val itemsRepository = mock<ItemsRepository>()
-    private val service = GildedRoseServiceImpl(itemsRepository)
+    private val service = GildedRoseService(itemsRepository)
 
     @BeforeEach
     fun setup() {
