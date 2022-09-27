@@ -2,25 +2,32 @@ package com.gildedrose
 
 import kotlinx.datetime.LocalDate
 import org.assertj.core.api.Assertions.assertThat
+import org.http4k.server.Undertow
+import org.http4k.server.asServer
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.mockito.kotlin.mock
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 class WebControllerIntegrationTest {
-    @Autowired
-    private lateinit var template: TestRestTemplate
-    @MockBean
-    private lateinit var itemsRepository: ItemsRepository
+    private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
+    private val itemsRepository = mock<ItemsRepository>()
+    private val config = Config.load("test")
+    private val webControllerHttp4k = WebControllerHttp4k(
+        config,
+        defaultLogger(""),
+        GildedRoseService(itemsRepository)
+    ).asServer(Undertow(config.port)).start()
+
+    @AfterEach
+    fun tearDown() {
+        webControllerHttp4k.stop()
+    }
 
     @Test
     fun `get items for a date`() {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class GildedRoseService(
-    val repository: ItemsRepository = DbItemsRepository(Config.load().db.toDataSource()),
+    val repository: ItemsRepository = DbItemsRepository(Config.load().db.toDataSource(), ::defaultLogger),
     val gildedRose: GildedRose = GildedRose(),
     newLogger: (String) -> Logger = ::defaultLogger
 ) {
