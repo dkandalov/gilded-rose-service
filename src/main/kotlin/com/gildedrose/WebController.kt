@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class WebController(@Autowired val gildedRoseService: GildedRoseService) {
+class WebController(
+    @Autowired val gildedRoseService: GildedRoseService
+) {
     @Autowired
     private val logger: Logger? = null
 

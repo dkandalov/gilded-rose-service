@@ -11,7 +11,7 @@ data class Item(
 }
 
 class GildedRose(newLogger: (String) -> Logger = ::defaultLogger) {
-    private val logger = newLogger(this::class.java.simpleName)
+    private val logger = newLogger(javaClass.simpleName)
 
     fun update(items: List<Item>) {
         logger.info("Updating items ${items.size}")
