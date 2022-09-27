@@ -1,8 +1,6 @@
 package com.gildedrose
 
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 
 data class Item(
     val name: String,
@@ -12,12 +10,11 @@ data class Item(
     override fun toString() = "$name, $sellIn, $quality"
 }
 
-@Service
-class GildedRose {
-    @Autowired private val logger: Logger? = null
+class GildedRose(newLogger: (String) -> Logger = ::defaultLogger) {
+    private val logger = newLogger(this::class.java.simpleName)
 
     fun update(items: List<Item>) {
-        logger?.info("Updating items ${items.size}")
+        logger.info("Updating items ${items.size}")
 
         items.forEach { item ->
             update(item)
@@ -25,7 +22,7 @@ class GildedRose {
     }
 
     fun update(item: Item) {
-        logger?.info("Updating item $item")
+        logger.info("Updating item $item")
 
         when (item.name) {
             "Aged Brie"                                 -> item.updateQuality(1)

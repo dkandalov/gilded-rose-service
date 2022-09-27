@@ -2,13 +2,9 @@ package com.gildedrose
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
 class GildedRoseRegressionTest {
-    @Autowired
-    private val gildedRose: GildedRose? = null
+    private val gildedRose = GildedRose()
 
     @Test
     fun `output over 100 days`() {
@@ -33,7 +29,7 @@ class GildedRoseRegressionTest {
                 log(item)
             }
             log()
-            gildedRose?.update(items)
+            gildedRose.update(items)
         }
 
         assertEquals(expectedOutput, output)
