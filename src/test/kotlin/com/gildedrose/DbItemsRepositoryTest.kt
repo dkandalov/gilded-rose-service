@@ -9,14 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.ActiveProfiles
+import javax.sql.DataSource
 
 @SpringBootTest
 @ActiveProfiles("test")
-class DbItemsRepositoryTest {
-    @Autowired
-    private lateinit var jdbcTemplate: JdbcTemplate
-    @Autowired
-    private lateinit var repository: ItemsRepository
+class DbItemsRepositoryTest(
+    @Autowired private val dataSource: DataSource
+) {
+    private val jdbcTemplate = JdbcTemplate(dataSource)
+    private val repository = DbItemsRepository(dataSource)
 
     @BeforeEach
     fun setup() {
