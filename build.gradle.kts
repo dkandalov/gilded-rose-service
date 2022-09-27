@@ -32,6 +32,7 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.mockito:mockito-inline:4.8.0")
     testImplementation("org.http4k:http4k-testing-hamkrest:4.30.8.0")
+    testImplementation("org.http4k:http4k-client-apache:4.30.8.0")
 
     testRuntimeOnly("com.h2database:h2")
 }

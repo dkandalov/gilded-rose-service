@@ -5,7 +5,9 @@ import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
 import org.slf4j.LoggerFactory
+import java.io.Closeable
 import java.util.*
+import javax.sql.DataSource
 
 fun main() {
     startApp(loadConfig())
