@@ -12,7 +12,7 @@ interface ItemsRepository {
 }
 
 @Repository
-class ItemsRepositoryImpl : ItemsRepository {
+class DbItemsRepository : ItemsRepository {
     @Autowired private lateinit var jdbcTemplate: JdbcTemplate
     @Autowired private val logger: Logger? = null
 
