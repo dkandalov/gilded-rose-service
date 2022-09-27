@@ -1,8 +1,6 @@
 package com.gildedrose
 
 import org.assertj.core.api.Assertions.assertThat
-import org.http4k.server.Undertow
-import org.http4k.server.asServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,10 +14,7 @@ class IntegrationTest {
     private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
     private val config = Config.load("test")
     private val jdbcTemplate = JdbcTemplate(config.db.toDataSource())
-    private val app =
-        WebControllerHttp4k(config, GildedRoseService(DbItemsRepository(config.db.toDataSource())))
-            .asServer(Undertow(config.port))
-            .start()
+    private val app = startApp(config)
 
     @BeforeEach
     fun createTable() {
@@ -28,7 +23,7 @@ class IntegrationTest {
 
     @AfterEach
     fun tearDown() {
-        app.stop()
+        app.close()
         jdbcTemplate.execute("drop table Items")
     }
 

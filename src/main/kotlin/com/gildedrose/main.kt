@@ -9,12 +9,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.*
 
 fun main() {
-    val config = Config.load()
+    startApp(Config.load())
+}
+
+fun startApp(config: Config): AutoCloseable {
     val dataSource = config.db.toDataSource()
     val gildedRoseService = GildedRoseService(DbItemsRepository(dataSource))
-    WebControllerHttp4k(config, gildedRoseService)
+    val server = WebControllerHttp4k(config, gildedRoseService)
         .asServer(Undertow(config.port))
         .start()
+    return AutoCloseable {
+        server.close()
+        dataSource.close()
+    }
 }
 
 @SpringBootApplication
