@@ -5,17 +5,10 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.ActiveProfiles
-import javax.sql.DataSource
 
-@SpringBootTest
-@ActiveProfiles("test")
-class DbItemsRepositoryTest(
-    @Autowired private val dataSource: DataSource
-) {
+class DbItemsRepositoryTest {
+    private val dataSource = Config.load("test").db.toDataSource()
     private val jdbcTemplate = JdbcTemplate(dataSource)
     private val repository = DbItemsRepository(dataSource)
 

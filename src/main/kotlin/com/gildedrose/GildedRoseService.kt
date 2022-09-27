@@ -3,12 +3,11 @@ package com.gildedrose
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class GildedRoseService(
-    @Autowired val repository: ItemsRepository,
+    val repository: ItemsRepository = DbItemsRepository(Config.load().db.toDataSource()),
     val gildedRose: GildedRose = GildedRose(),
     newLogger: (String) -> Logger = ::defaultLogger
 ) {
@@ -16,12 +15,12 @@ class GildedRoseService(
 
     fun items(asOfDate: LocalDate): List<Item> {
         logger.info("Loading items for $asOfDate")
-        val updatedItems = repository.loadItems(createdOnOrBefore = asOfDate).map { (createdDate, item) ->
+        val items = repository.loadItems(createdOnOrBefore = asOfDate)
+        return items.map { (createdDate, item) ->
             repeat(times = asOfDate.minus(createdDate).days) {
                 gildedRose.update(item)
             }
             item
         }
-        return updatedItems
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class WebController(
-    @Autowired val gildedRoseService: GildedRoseService
+    @Autowired val gildedRoseService: GildedRoseService = GildedRoseService()
 ) {
     @Autowired
     private val logger: Logger? = null
