@@ -1,36 +1,41 @@
 package com.gildedrose
 
-import kotlinx.datetime.LocalDate
 import org.assertj.core.api.Assertions.assertThat
-import org.http4k.server.Undertow
-import org.http4k.server.asServer
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.mockito.kotlin.mock
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.jdbc.core.JdbcTemplate
 
 class WebControllerIntegrationTest {
     private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
-    private val itemsRepository = mock<ItemsRepository>()
-    private val config = Config.load("test")
-    private val server = WebControllerHttp4k(config, GildedRoseService(itemsRepository))
-        .asServer(Undertow(config.port)).start()
+    private val app = App(Config.load("test")).start()
+    private val jdbcTemplate = JdbcTemplate(app.dataSource)
+
+    @BeforeEach
+    fun setup() {
+        jdbcTemplate.execute("""
+            create table Items(
+                name varchar(255), 
+                sellIn int, 
+                quality int, 
+                createdOn varchar(255)
+            )
+        """)
+    }
 
     @AfterEach
     fun tearDown() {
-        server.stop()
+        jdbcTemplate.execute("drop table Items")
+        app.close()
     }
 
     @Test
     fun `get items for a date`() {
-        given(itemsRepository.loadItems(any())).willReturn(listOf(
-            Pair(LocalDate(2019, 1, 2), Item(name = "Box", sellIn = 1, quality = 2))
-        ))
+        jdbcTemplate.execute("""insert into Items (name, sellIn, quality, createdOn) values('Box', 1, 2, '2019-01-02')""")
 
         val response = template.withBasicAuth("testUser", "secret")
             .getForEntity("/items?date=2019-01-02", String::class.java)
@@ -39,8 +44,6 @@ class WebControllerIntegrationTest {
 
     @Test
     fun `get items for a date with no items`() {
-        given(itemsRepository.loadItems(any())).willReturn(emptyList())
-
         val response = template.withBasicAuth("testUser", "secret")
             .getForEntity("/items?date=2019-01-02", String::class.java)
         assertThat(response.body).isEqualTo("""[]""")
