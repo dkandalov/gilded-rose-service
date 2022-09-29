@@ -15,6 +15,9 @@ class LoggingConfig {
     @Scope("prototype")
     fun log(injectionPoint: InjectionPoint): Logger {
         val aClass = injectionPoint.field?.declaringClass ?: injectionPoint.member.declaringClass
-        return LoggerFactory.getLogger(aClass.simpleName)
+        return defaultLogger(aClass.simpleName)
     }
 }
+
+fun defaultLogger(name: String): Logger =
+    LoggerFactory.getLogger(name)
