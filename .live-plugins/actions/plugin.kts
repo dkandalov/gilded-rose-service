@@ -126,3 +126,7 @@ class WebControllerHttp4k(
     override fun invoke(request: Request) = routes(request)
 }    
 """))
+
+registerAction("Insert TestRestTemplate Snippet", keyStroke = "ctrl shift K, 3", action = InsertTextAction("""
+private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
+""".trimIndent()))
