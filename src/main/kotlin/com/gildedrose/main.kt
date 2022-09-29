@@ -4,8 +4,6 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -20,7 +18,7 @@ class App (config: Config) : AutoCloseable {
     val dataSource = config.db.toDataSource()
     private val itemsRepository = DbItemsRepository(dataSource)
     private val gildedRoseService = GildedRoseService(itemsRepository)
-    private val controller = WebControllerHttp4k(config, gildedRoseService)
+    private val controller = WebController(config, gildedRoseService)
     private val server = controller.asServer(Undertow(config.port))
 
     fun start() = apply {
@@ -33,10 +31,6 @@ class App (config: Config) : AutoCloseable {
     }
 }
 
-@SpringBootApplication
-class GildedRoseApplication
-
-@ConfigurationProperties(prefix = "gildedrose")
 class Config(
     var users: List<String> = emptyList(),
     var port: Int = 0,
