@@ -1,8 +1,8 @@
 package com.gildedrose
 
 import kotlinx.datetime.LocalDate
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,20 +43,16 @@ class ItemsRepositoryImplTest {
 
     @Test
     fun `load items added on or before specified date`() {
-        assertEquals(
-            listOf(
+        assertThat(repository.loadItems(createdOnOrBefore = LocalDate(2019, 1, 2)))
+            .isEqualTo(listOf(
                 Pair(LocalDate(2019, 1, 1), Item("Box", 10, 20)),
                 Pair(LocalDate(2019, 1, 2), Item("Aged Brie", 30, 40))
-            ),
-            repository.loadItems(createdOnOrBefore = LocalDate(2019, 1, 2))
-        )
+            ))
     }
 
     @Test
     fun `load no items when they're added after specified date`() {
-        assertEquals(
-            emptyList<Pair<LocalDate, Item>>(),
-            repository.loadItems(createdOnOrBefore = LocalDate(2018, 1, 1))
-        )
+        assertThat(repository.loadItems(createdOnOrBefore = LocalDate(2018, 1, 2)))
+            .isEqualTo(emptyList<Pair<LocalDate, Item>>())
     }
 }

@@ -1,7 +1,7 @@
 package com.gildedrose
 
 import kotlinx.datetime.LocalDate
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -28,12 +28,18 @@ class GildedRoseServiceTest {
     @Test
     fun `items which were added on the same date`() {
         val items = service.items(LocalDate(2019, 1, 2))
-        assertEquals(listOf(Item("Box", 10, 20), Item("Aged Brie", 20, 30)), items)
+        assertThat(items).isEqualTo(listOf(
+            Item("Box", 10, 20),
+            Item("Aged Brie", 20, 30)
+        ))
     }
 
     @Test
     fun `items which were added day before`() {
         val items = service.items(LocalDate(2019, 1, 4))
-        assertEquals(listOf(Item("Box", 8, 18), Item("Aged Brie", 18, 32)), items)
+        assertThat(items).isEqualTo(listOf(
+            Item("Box", 8, 18),
+            Item("Aged Brie", 18, 32)
+        ))
     }
 }

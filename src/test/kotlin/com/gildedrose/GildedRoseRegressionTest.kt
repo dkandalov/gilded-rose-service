@@ -1,6 +1,6 @@
 package com.gildedrose
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -36,7 +36,7 @@ class GildedRoseRegressionTest {
             gildedRose?.update(items)
         }
 
-        assertEquals(expectedOutput, output)
+        assertThat(output).isEqualTo(expectedOutput)
     }
 
     private fun log(message: Any = "") {
