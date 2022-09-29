@@ -5,18 +5,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
-@ActiveProfiles("test")
-class ItemsRepositoryImplTest {
-    @Autowired
-    private lateinit var jdbcTemplate: JdbcTemplate
-    @Autowired
-    private lateinit var repository: ItemsRepository
+class DbItemsRepositoryTest {
+    private val dataSource = Config.load("test").db.toDataSource()
+    private val jdbcTemplate = JdbcTemplate(dataSource)
+    private val repository = DbItemsRepository(dataSource)
 
     @BeforeEach
     fun setup() {
