@@ -6,16 +6,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.mockito.kotlin.mock
 
-@SpringBootTest
 class GildedRoseServiceTest {
-    @Autowired
-    private lateinit var service: GildedRoseService
-    @MockBean
-    private lateinit var itemsRepository: ItemsRepository
+    private val itemsRepository = mock<ItemsRepository>()
+    private val service = GildedRoseService(itemsRepository)
 
     @BeforeEach
     fun setup() {
