@@ -32,9 +32,9 @@ class App (config: Config) : AutoCloseable {
 }
 
 class Config(
-    var users: List<String> = emptyList(),
-    var port: Int = 0,
-    var db: DbConfig = DbConfig()
+    val users: List<String>,
+    val port: Int,
+    val db: DbConfig
 ) {
     companion object {
         fun load(env: String? = null): Config {
@@ -54,9 +54,9 @@ class Config(
 }
 
 class DbConfig(
-    var url: String = "",
-    var username: String = "",
-    var password: String = ""
+    val url: String,
+    val username: String,
+    val password: String
 )
 
 fun DbConfig.toDataSource() =

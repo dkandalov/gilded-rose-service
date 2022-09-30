@@ -10,26 +10,20 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.jdbc.core.JdbcTemplate
 
-class WebControllerIntegrationTest {
-    private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
-    private val app = App(Config.load("test")).start()
+class IntegrationTest {
+    private val config = Config.load("test")
+    private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:${config.port}/"))
+    private val app = App(config).start()
     private val jdbcTemplate = JdbcTemplate(app.dataSource)
 
     @BeforeEach
     fun setup() {
-        jdbcTemplate.execute("""
-            create table Items(
-                name varchar(255), 
-                sellIn int, 
-                quality int, 
-                createdOn varchar(255)
-            )
-        """)
+        jdbcTemplate.createItemsTable()
     }
 
     @AfterEach
     fun tearDown() {
-        jdbcTemplate.execute("drop table Items")
+        jdbcTemplate.dropItemsTable()
         app.close()
     }
 

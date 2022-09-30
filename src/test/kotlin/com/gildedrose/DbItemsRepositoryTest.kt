@@ -14,14 +14,7 @@ class DbItemsRepositoryTest {
 
     @BeforeEach
     fun setup() {
-        jdbcTemplate.execute("""
-            create table Items(
-                name varchar(255), 
-                sellIn int, 
-                quality int, 
-                createdOn varchar(255)
-            )
-        """)
+        jdbcTemplate.createItemsTable()
         jdbcTemplate.execute("""
             insert into Items (name, sellIn, quality, createdOn) values('Box', 10, 20, '2019-01-01');
             insert into Items (name, sellIn, quality, createdOn) values('Aged Brie', 30, 40, '2019-01-02');
@@ -32,7 +25,7 @@ class DbItemsRepositoryTest {
 
     @AfterEach
     fun tearDown() {
-        jdbcTemplate.execute("drop table Items")
+        jdbcTemplate.dropItemsTable()
     }
 
     @Test
@@ -49,4 +42,12 @@ class DbItemsRepositoryTest {
         assertThat(repository.loadItems(createdOnOrBefore = LocalDate(2018, 1, 2)))
             .isEqualTo(emptyList<Pair<LocalDate, Item>>())
     }
+}
+
+fun JdbcTemplate.createItemsTable() {
+    execute("create table Items(name varchar(255), sellIn int, quality int, createdOn varchar(255))")
+}
+
+fun JdbcTemplate.dropItemsTable() {
+    execute("drop table Items")
 }
