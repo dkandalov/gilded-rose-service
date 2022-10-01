@@ -2,19 +2,36 @@ package com.gildedrose
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.runApplication
+import org.http4k.server.Undertow
+import org.http4k.server.asServer
 import java.util.*
+import kotlin.concurrent.thread
 
-fun main(args: Array<String>) {
-    runApplication<GildedRoseApplication>(*args)
+fun main() {
+    val app = App().start()
+    Runtime.getRuntime().addShutdownHook(thread(start = false) {
+        app.stop()
+    })
 }
 
-@SpringBootApplication
-class GildedRoseApplication
+class App(env: String? = null) {
+    val config = Config.load(env)
+    val dataSource = config.dbConfig.toDataSource()
+    private val service = GildedRoseService(DbItemsRepository(dataSource))
+    private val server = WebController(config, service)
+        .asServer(Undertow(port = config.port))
 
-@ConfigurationProperties(prefix = "gildedrose")
+    fun start(): App {
+        server.start()
+        return this
+    }
+
+    fun stop() {
+        server.stop()
+        dataSource.close()
+    }
+}
+
 class Config(
     var users: List<String> = emptyList(),
     var port: Int = 0,

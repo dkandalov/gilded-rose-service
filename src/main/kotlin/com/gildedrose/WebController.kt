@@ -20,13 +20,6 @@ import org.http4k.lens.map
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.core.convert.converter.Converter
-import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import javax.sql.DataSource
 
 class WebController(
     private val config: Config,
@@ -58,20 +51,3 @@ private val kotlinxLocalDate = BiDiMapping<String, LocalDate>(
     asOut = { LocalDate.parse(it) },
     asIn = { it.toString() }
 )
-
-@RestController
-class SpringWebController(
-    @Autowired private val dataSource: DataSource,
-    val repository: ItemsRepository = DbItemsRepository(dataSource),
-    val gildedRoseService: GildedRoseService = GildedRoseService(repository)
-) {
-    @GetMapping("/items")
-    fun items(@RequestParam date: LocalDate): List<Item> {
-        return gildedRoseService.items(date)
-    }
-}
-
-@Component
-class TokenConverter : Converter<String, LocalDate> {
-    override fun convert(isoString: String) = LocalDate.parse(isoString)
-}
