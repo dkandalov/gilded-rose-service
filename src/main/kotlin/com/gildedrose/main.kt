@@ -4,8 +4,8 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -34,10 +34,9 @@ class App(env: String? = null) {
     }
 }
 
-@SpringBootApplication
-class GildedRoseApplication
+fun defaultLogger(name: String?): Logger =
+    LoggerFactory.getLogger(name)
 
-@ConfigurationProperties(prefix = "gildedrose")
 class Config(
     var users: List<String> = emptyList(),
     var port: Int = 0,
