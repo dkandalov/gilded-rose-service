@@ -1,21 +1,24 @@
 package com.gildedrose
 
 import com.gildedrose.domain.Item
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import kotlinx.datetime.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
-@ActiveProfiles("test")
 class DbItemsRepositoryTest {
-    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
-    @Autowired private lateinit var repository: ItemsRepository
+    private val jdbcTemplate = JdbcTemplate(HikariDataSource(
+        HikariConfig().also {
+            it.username = "sa"
+            it.password = ""
+            it.jdbcUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+        }
+    ))
+    private val repository = DbItemsRepository(jdbcTemplate)
 
     @BeforeEach
     fun setup() {
