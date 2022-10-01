@@ -1,4 +1,4 @@
-package com.gildedrose
+package com.gildedrose.domain
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

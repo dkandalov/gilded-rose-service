@@ -1,16 +1,8 @@
-package com.gildedrose
+package com.gildedrose.domain
 
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-
-data class Item(
-    val name: String,
-    var sellIn: Int,
-    var quality: Int
-) {
-    override fun toString() = "$name, $sellIn, $quality"
-}
 
 @Service
 class GildedRose {

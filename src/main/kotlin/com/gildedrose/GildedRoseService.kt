@@ -1,5 +1,7 @@
 package com.gildedrose
 
+import com.gildedrose.domain.GildedRose
+import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import org.slf4j.Logger

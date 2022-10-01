@@ -1,5 +1,6 @@
 package com.gildedrose
 
+import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired

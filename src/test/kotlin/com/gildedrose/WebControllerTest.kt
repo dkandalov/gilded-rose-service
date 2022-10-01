@@ -1,5 +1,6 @@
 package com.gildedrose
 
+import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
