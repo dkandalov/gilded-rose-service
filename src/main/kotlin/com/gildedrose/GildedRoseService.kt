@@ -5,18 +5,16 @@ import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 
-@Service
 class GildedRoseService(
-    @Autowired val repository: ItemsRepository,
-    val gildedRose: GildedRose = GildedRose()
+    private val repository: ItemsRepository,
+    newLogger: (String) -> Logger = ::defaultLogger,
 ) {
-    @Autowired private val logger: Logger? = null
+    private val gildedRose = GildedRose()
+    private val logger = newLogger(javaClass.simpleName)
 
     fun items(asOfDate: LocalDate): List<Item> {
-        logger?.info("Loading items for $asOfDate")
+        logger.info("Loading items for $asOfDate")
 
         val items = repository.loadItems(createdOnOrBefore = asOfDate)
         return items.map { (createdDate, item) ->
