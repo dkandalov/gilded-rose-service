@@ -2,16 +2,21 @@ package com.gildedrose
 
 import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
+import javax.sql.DataSource
 
 interface ItemsRepository {
     fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>>
 }
 
 @Repository
-class DbItemsRepository(private val jdbcTemplate: JdbcTemplate) : ItemsRepository {
+class DbItemsRepository(
+    @Autowired private val dataSource: DataSource
+) : ItemsRepository {
+    private val jdbc = JdbcTemplate(dataSource)
     private val logger = newLogger(javaClass.simpleName)
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {
@@ -22,10 +27,10 @@ class DbItemsRepository(private val jdbcTemplate: JdbcTemplate) : ItemsRepositor
                 quality = resultSet.getInt(3)
             )
             val createdDate = LocalDate.parse(resultSet.getString(4))
-            logger?.info("Loaded item $item")
+            logger.info("Loaded item $item")
             Pair(createdDate, item)
         }
-        return jdbcTemplate.query(
+        return jdbc.query(
             "select * from Items where createdOn <= ?",
             rowMapper,
             createdOnOrBefore.toString()

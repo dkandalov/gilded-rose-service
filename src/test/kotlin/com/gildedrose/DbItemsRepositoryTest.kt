@@ -11,14 +11,15 @@ import org.junit.jupiter.api.Test
 import org.springframework.jdbc.core.JdbcTemplate
 
 class DbItemsRepositoryTest {
-    private val jdbcTemplate = JdbcTemplate(HikariDataSource(
+    private val dataSource = HikariDataSource(
         HikariConfig().also {
             it.username = "sa"
             it.password = ""
             it.jdbcUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
         }
-    ))
-    private val repository = DbItemsRepository(jdbcTemplate)
+    )
+    private val jdbcTemplate = JdbcTemplate(dataSource)
+    private val repository = DbItemsRepository(dataSource)
 
     @BeforeEach
     fun setup() {
@@ -34,6 +35,7 @@ class DbItemsRepositoryTest {
     @AfterEach
     fun tearDown() {
         jdbcTemplate.dropItemsTable()
+        dataSource.close()
     }
 
     @Test
