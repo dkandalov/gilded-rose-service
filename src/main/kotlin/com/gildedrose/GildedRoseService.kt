@@ -6,12 +6,10 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 
-@Service
 class GildedRoseService(
-    @Autowired val repository: ItemsRepository,
-    val gildedRose: GildedRose = GildedRose()
+    private val repository: ItemsRepository,
+    private val gildedRose: GildedRose = GildedRose()
 ) {
     @Autowired private val logger: Logger? = null
 
