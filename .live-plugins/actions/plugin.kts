@@ -56,7 +56,7 @@ registerAction("Insert Config Snippet", keyStroke = "ctrl shift K, 2", action = 
 class Config(
     var users: List<String> = emptyList(),
     var port: Int = 0,
-    var db: DbConfig = DbConfig()
+    var dbConfig: DbConfig = DbConfig()
 ) {
     companion object {
         fun load(env: String? = null): Config {
@@ -65,7 +65,7 @@ class Config(
             return Config(
                 users = properties["gildedrose.users"].toString().split(","),
                 port = properties["server.port"].toString().toInt(),
-                db = DbConfig(
+                dbConfig = DbConfig(
                     url = properties["spring.datasource.url"].toString(),
                     username = properties["spring.datasource.username"].toString(),
                     password = properties["spring.datasource.password"].toString()
@@ -150,5 +150,5 @@ private val kotlinxLocalDate = BiDiMapping<String, LocalDate>(
 """))
 
 registerAction("Insert TestRestTemplate Snippet", keyStroke = "ctrl shift K, 4", action = InsertTextAction("""
-private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
+private val rest = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
 """.trimIndent()))
