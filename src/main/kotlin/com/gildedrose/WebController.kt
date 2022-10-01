@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import javax.sql.DataSource
 
 @RestController
 class WebController(
-    @Autowired private val repository: ItemsRepository,
-    val gildedRoseService: GildedRoseService = GildedRoseService(repository)
+    @Autowired dataSource: DataSource,
+    private val repository: ItemsRepository = DbItemsRepository(dataSource),
+    private val gildedRoseService: GildedRoseService = GildedRoseService(repository)
 ) {
     @GetMapping("/items")
     fun items(@RequestParam date: LocalDate): List<Item> {

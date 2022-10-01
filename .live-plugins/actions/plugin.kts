@@ -1,4 +1,3 @@
-
 import com.intellij.execution.ExecutionListener
 import com.intellij.execution.ExecutionManager.Companion.EXECUTION_TOPIC
 import com.intellij.execution.process.ProcessHandler
@@ -35,13 +34,14 @@ project!!.messageBus.connect(pluginDisposable)
 
 fun startBackgroundTask(taskTitle: String): CountDownLatch {
     val latch = CountDownLatch(1)
-    object: Task.Backgroundable(null, taskTitle, true, ALWAYS_BACKGROUND) {
+    object : Task.Backgroundable(null, taskTitle, true, ALWAYS_BACKGROUND) {
         override fun run(indicator: ProgressIndicator) = latch.await()
+        override fun onCancel() = latch.countDown()
     }.queue()
     return latch
 }
 
-class InsertTextAction(private val text: String) : EditorAction(object: EditorActionHandler() {
+class InsertTextAction(private val text: String) : EditorAction(object : EditorActionHandler() {
     override fun doExecute(editor: Editor, caret: Caret?, dataContext: DataContext?) {
         editor.document.insertString(editor.caretModel.offset, text)
     }
