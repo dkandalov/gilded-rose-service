@@ -2,19 +2,16 @@ package com.gildedrose
 
 import kotlinx.datetime.LocalDate
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
-import org.springframework.stereotype.Repository
 import javax.sql.DataSource
 
 interface ItemsRepository {
     fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>>
 }
 
-@Repository
 class DbItemsRepository(
-    @Autowired private val dataSource: DataSource,
+    dataSource: DataSource,
     newLogger: (String) -> Logger = ::defaultLogger
 ) : ItemsRepository {
     private val logger = newLogger(javaClass.simpleName)
