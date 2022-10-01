@@ -15,7 +15,9 @@ fun main() {
 class App(env: String? = null) {
     val config = Config.load(env)
     val dataSource = config.dbConfig.toDataSource()
-    private val server = WebController(config, GildedRoseService(DbItemsRepository(dataSource)))
+    private val repository = DbItemsRepository(dataSource)
+    private val service = GildedRoseService(repository)
+    private val server = WebController(config, service)
         .asServer(Undertow(config.port))
 
     fun start() {
@@ -24,6 +26,7 @@ class App(env: String? = null) {
 
     fun stop() {
         server.stop()
+        dataSource.close()
     }
 }
 
