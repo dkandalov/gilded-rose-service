@@ -1,24 +1,16 @@
 package com.gildedrose.domain
 
-import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class GildedRose {
-    @Autowired private val logger: Logger? = null
-
     fun update(items: List<Item>) {
-        logger?.info("Updating items ${items.size}")
-
         items.forEach { item ->
             update(item)
         }
     }
 
     fun update(item: Item) {
-        logger?.info("Updating item $item")
-
         when (item.name) {
             "Aged Brie"                                 -> item.updateQuality(1)
             "Backstage passes to a TAFKAL80ETC concert" ->
