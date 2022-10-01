@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service
 @Service
 class GildedRoseService(
     @Autowired val repository: ItemsRepository,
-    val gildedRose: GildedRose = GildedRose()
+    val gildedRose: GildedRose = GildedRose(),
+    newLogger: (String) -> Logger = ::defaultLogger
 ) {
-    @Autowired private val logger: Logger? = null
+    private val logger = newLogger(javaClass.simpleName)
 
     fun items(asOfDate: LocalDate): List<Item> {
-        logger?.info("Loading items for $asOfDate")
+        logger.info("Loading items for $asOfDate")
 
         val items = repository.loadItems(createdOnOrBefore = asOfDate)
         return items.map { (createdDate, item) ->

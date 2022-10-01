@@ -47,7 +47,11 @@ class InsertTextAction(private val text: String) : EditorAction(object: EditorAc
     }
 })
 
-registerAction("Insert Config Snippet", keyStroke = "ctrl shift K, 1", action = InsertTextAction("""
+registerAction("Insert Logger Snippet", keyStroke = "ctrl shift K, 1", action = InsertTextAction("""
+newLogger: (String) -> Logger = ::defaultLogger
+""".trimIndent()))
+
+registerAction("Insert Config Snippet", keyStroke = "ctrl shift K, 2", action = InsertTextAction("""
 @ConfigurationProperties(prefix = "gildedrose")
 class Config(
     var users: List<String> = emptyList(),
@@ -91,7 +95,7 @@ private fun propertiesFromClasspath(path: String) = Properties().apply {
 }    
 """))
 
-registerAction("Insert Http4k Controller Snippet", keyStroke = "ctrl shift K, 2", action = InsertTextAction("""
+registerAction("Insert Http4k Controller Snippet", keyStroke = "ctrl shift K, 3", action = InsertTextAction("""
 import kotlinx.datetime.LocalDate
 import org.http4k.core.Body
 import org.http4k.core.Filter
@@ -145,6 +149,6 @@ private val kotlinxLocalDate = BiDiMapping<String, LocalDate>(
 )
 """))
 
-registerAction("Insert TestRestTemplate Snippet", keyStroke = "ctrl shift K, 3", action = InsertTextAction("""
+registerAction("Insert TestRestTemplate Snippet", keyStroke = "ctrl shift K, 4", action = InsertTextAction("""
 private val template = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
 """.trimIndent()))
