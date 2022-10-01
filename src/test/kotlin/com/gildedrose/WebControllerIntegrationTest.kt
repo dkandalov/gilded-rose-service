@@ -1,8 +1,6 @@
 package com.gildedrose
 
 import org.assertj.core.api.Assertions.assertThat
-import org.http4k.server.Undertow
-import org.http4k.server.asServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -13,23 +11,20 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.jdbc.core.JdbcTemplate
 
 class WebControllerIntegrationTest {
-    private val config = Config.load("test")
-    private val dataSource = config.dbConfig.toDataSource()
-    private val jdbcTemplate = JdbcTemplate(dataSource)
-    private val rest = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:${config.port}/"))
-    private val server = WebController(config, GildedRoseService(DbItemsRepository(dataSource)))
-        .asServer(Undertow(config.port))
+    private val app = App("test")
+    private val jdbcTemplate = JdbcTemplate(app.dataSource)
+    private val rest = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:${app.config.port}/"))
 
     @BeforeEach
     fun setup() {
-        server.start()
+        app.start()
         jdbcTemplate.createItemsTable()
     }
 
     @AfterEach
     fun tearDown() {
         jdbcTemplate.dropItemsTable()
-        server.stop()
+        app.stop()
     }
 
     @Test
