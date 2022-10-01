@@ -13,7 +13,7 @@ interface GildedRoseService {
 @Service
 class GildedRoseServiceImpl(
     @Autowired val repository: ItemsRepository,
-    @Autowired val gildedRose: GildedRose
+    val gildedRose: GildedRose = GildedRose()
 ) : GildedRoseService {
     @Autowired private val logger: Logger? = null
 
