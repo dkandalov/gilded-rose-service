@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import javax.sql.DataSource
 
 @RestController
 class WebController(
-    @Autowired repository: ItemsRepository,
+    @Autowired private val dataSource: DataSource,
+    repository: ItemsRepository = DbItemsRepository(dataSource),
     val gildedRoseService: GildedRoseService = GildedRoseService(repository)
 ) {
     @GetMapping("/items")
