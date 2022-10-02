@@ -17,8 +17,8 @@ class App(env: String? = null) {
     val dataSource = config.dbConfig.toDataSource()
     private val repository = DbItemsRepository(dataSource)
     private val service = GildedRoseService(repository)
-    private val server = WebController(config, service)
-        .asServer(Undertow(config.port))
+    private val webController = WebController(config, service)
+    private val server = webController.asServer(Undertow(config.port))
 
     fun start() {
         server.start()

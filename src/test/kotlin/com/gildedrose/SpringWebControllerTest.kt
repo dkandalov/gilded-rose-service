@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class WebControllerTest {
+class SpringWebControllerTest {
     @Autowired private lateinit var mvc: MockMvc
     @MockBean private lateinit var itemsRepository: ItemsRepository
 
