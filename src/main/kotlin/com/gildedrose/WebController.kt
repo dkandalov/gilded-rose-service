@@ -11,9 +11,10 @@ import javax.sql.DataSource
 @RestController
 class WebController(
     @Autowired dataSource: DataSource,
-    val repository: ItemsRepository = DbItemsRepository(dataSource),
-    val gildedRoseService: GildedRoseService = GildedRoseService(repository)
+    repository: ItemsRepository = DbItemsRepository(dataSource)
 ) {
+    private val gildedRoseService: GildedRoseService = GildedRoseService(repository)
+
     @GetMapping("/items")
     fun items(@RequestParam date: LocalDate): List<Item> {
         return gildedRoseService.items(date)
