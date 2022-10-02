@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
+import javax.sql.DataSource
 
 interface ItemsRepository {
     fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>>
@@ -13,8 +14,9 @@ interface ItemsRepository {
 
 @Repository
 class DbItemsRepository(
-    @Autowired private val jdbc: JdbcTemplate
+    @Autowired private val dataSource: DataSource
 ) : ItemsRepository {
+    private val jdbc = JdbcTemplate(dataSource)
     private val logger = newLogger(javaClass.simpleName)
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {

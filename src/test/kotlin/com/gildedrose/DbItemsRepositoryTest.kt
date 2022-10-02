@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 class DbItemsRepositoryTest {
     private val dataSource = Config.load("test").dbConfig.toDataSource()
     private val jdbc = JdbcTemplate(dataSource)
-    private val repository = DbItemsRepository(jdbc)
+    private val repository = DbItemsRepository(dataSource)
 
     @BeforeEach
     fun setup() {
