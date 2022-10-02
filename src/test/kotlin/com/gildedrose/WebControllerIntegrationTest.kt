@@ -12,24 +12,36 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.jdbc.core.JdbcTemplate
 
-class WebControllerIntegrationTest {
-    private val config = Config.load("test")
-    private val dataSource = config.dbConfig.toDataSource()
-    private val jdbc = JdbcTemplate(dataSource)
-    private val rest = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:8081/"))
+class App(env: String? = null) {
+    val config = Config.load(env)
+    val dataSource = config.dbConfig.toDataSource()
     private val server = WebController(config, GildedRoseService(DbItemsRepository(dataSource)))
         .asServer(Undertow(config.port))
 
+    fun start() {
+        server.start()
+    }
+
+    fun stop() {
+        server.stop()
+    }
+}
+
+class WebControllerIntegrationTest {
+    private val app = App("test")
+    private val jdbc = JdbcTemplate(app.dataSource)
+    private val rest = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:${app.config.port}/"))
+
     @BeforeEach
     fun setup() {
-        server.start()
+        app.start()
         jdbc.createItemsTable()
     }
 
     @AfterEach
     fun tearDown() {
         jdbc.dropItemsTable()
-        server.stop()
+        app.stop()
     }
 
     @Test
