@@ -4,13 +4,10 @@ import com.gildedrose.domain.GildedRose
 import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 
-@Service
 class GildedRoseService(
-    @Autowired val repository: ItemsRepository,
-    val gildedRose: GildedRose = GildedRose()
+    private val repository: ItemsRepository,
+    private val gildedRose: GildedRose = GildedRose()
 ) {
     private val logger = newLogger(javaClass.simpleName)
 
