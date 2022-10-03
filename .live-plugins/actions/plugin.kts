@@ -101,9 +101,13 @@ class Config(
     var dbConfig: DbConfig = DbConfig()
 ) {
     companion object {
-        fun load(env: String? = null): Config {
-            val envPostfix = if (env == null) "" else "-${'$'}env"
-            val properties = propertiesFromClasspath("/application${'$'}envPostfix.properties")
+        fun load(env: String): Config {
+            val fileName = when (env) {
+                "prod" -> "/application.properties"
+                "test" -> "/application-test.properties"
+                else -> error("Unknown environment: ${'$'}env")
+            }
+            val properties = propertiesFromClasspath(fileName)
             return Config(
                 users = properties["gildedrose.users"].toString().split(","),
                 port = properties["server.port"].toString().toInt(),
@@ -134,7 +138,7 @@ fun DbConfig.toDataSource() =
 
 private fun propertiesFromClasspath(path: String) = Properties().apply {
     load(Config::class.java.getResourceAsStream(path))
-}    
+}
 """))
 
 registerAction("Insert Http4k Controller Snippet", keyStroke = "ctrl shift K, 3", action = InsertTextAction("""
