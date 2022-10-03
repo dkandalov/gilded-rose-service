@@ -3,7 +3,7 @@ package com.gildedrose.domain
 import org.springframework.stereotype.Service
 
 @Service
-class GildedRose() {
+class GildedRose {
     fun update(items: List<Item>) {
         items.forEach { item ->
             update(item)
@@ -17,10 +17,10 @@ class GildedRose() {
 
 val Item.type
     get() = when (name) {
-        "Backstage passes to a TAFKAL80ETC concert" -> PASS
-        "Aged Brie" -> BRIE
-        "Sulfuras, Hand of Ragnaros" -> SULFURAS
-        else -> NORMAL
+        "Backstage passes to a TAFKAL80ETC concert" -> Pass
+        "Aged Brie" -> Brie
+        "Sulfuras, Hand of Ragnaros" -> Sulfuras
+        else -> Normal
     }
 
 open class ItemType {
@@ -35,52 +35,49 @@ open class ItemType {
     }
 
     protected open fun degrade(item: Item) {
-        item.setQuality(
-            degradation(item)
-        )
+        item.setQuality(degradation(item))
     }
 
-    protected open fun degradation(item: Item) = when {
-        item.sellIn < 0 -> item.quality - 2
-        else -> item.quality - 1
-    }
+    protected open fun degradation(item: Item) =
+        when {
+            item.sellIn < 0 -> item.quality - 2
+            else -> item.quality - 1
+        }
 
-    protected fun Item.setQuality(quality: Int) {
-        this.quality = quality.coerceIn(0, 50)
+    protected fun Item.setQuality(newQuality: Int) {
+        quality = newQuality.coerceIn(0, 50)
     }
 }
 
-object PASS : ItemType() {
+object Pass : ItemType() {
     override fun degrade(item: Item) {
-        item.setQuality(
-            degradation(item)
-        )
+        item.setQuality(degradation(item))
     }
 
-    override fun degradation(item: Item) = when {
-        item.sellIn < 0 -> 0
-        item.sellIn < 5 -> item.quality + 3
-        item.sellIn < 10 -> item.quality + 2
-        else -> item.quality + 1
-    }
+    override fun degradation(item: Item) =
+        when {
+            item.sellIn < 0 -> 0
+            item.sellIn < 5 -> item.quality + 3
+            item.sellIn < 10 -> item.quality + 2
+            else -> item.quality + 1
+        }
 }
 
-object BRIE : ItemType() {
+object Brie : ItemType() {
     override fun degrade(item: Item) {
-        item.setQuality(
-            degradation(item)
-        )
+        item.setQuality(degradation(item))
     }
 
-    override fun degradation(item: Item) = if (item.sellIn < 0) {
-        item.quality + 2
-    } else
-        item.quality + 1
+    override fun degradation(item: Item) =
+        when {
+            item.sellIn < 0 -> item.quality + 2
+            else -> item.quality + 1
+        }
 }
 
-object SULFURAS : ItemType() {
+object Sulfuras : ItemType() {
     override fun age(item: Item) {}
     override fun degrade(item: Item) {}
 }
 
-object NORMAL : ItemType()
+object Normal : ItemType()
