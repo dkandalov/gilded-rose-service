@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 class DbItemsRepositoryTest {
     @Autowired private lateinit var jdbc: JdbcTemplate
-    @Autowired private lateinit var repository: ItemsRepository
+    private val repository by lazy { DbItemsRepository(jdbc) }
 
     @BeforeEach
     fun setup() {
