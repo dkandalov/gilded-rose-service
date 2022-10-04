@@ -1,31 +1,34 @@
 package com.gildedrose
 
 import org.assertj.core.api.Assertions.assertThat
+import org.http4k.server.Undertow
+import org.http4k.server.asServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 class WebControllerIntegrationTest {
-    @Autowired private lateinit var rest: TestRestTemplate
-    @Autowired private lateinit var jdbc: JdbcTemplate
+    private val config = Config.load("test")
+    private val dataSource = config.dbConfig.toDataSource()
+    private val jdbc = JdbcTemplate(dataSource)
+    private val rest = TestRestTemplate(RestTemplateBuilder().rootUri("http://127.0.0.1:${config.port}/"))
+    private val server = WebController(config, GildedRoseService(DbItemsRepository(dataSource)))
+        .asServer(Undertow(config.port))
 
     @BeforeEach
     fun setup() {
+        server.start()
         jdbc.createItemsTable()
     }
 
     @AfterEach
     fun tearDown() {
+        server.stop()
         jdbc.dropItemsTable()
     }
 
