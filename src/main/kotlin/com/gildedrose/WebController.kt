@@ -13,7 +13,7 @@ class WebController(
     @Autowired private val dataSource: DataSource,
     repository: ItemsRepository = DbItemsRepository(dataSource)
 ) {
-    val gildedRoseService: GildedRoseService = GildedRoseService(repository)
+    private val gildedRoseService = GildedRoseService(repository)
 
     @GetMapping("/items")
     fun items(@RequestParam date: LocalDate): List<Item> {
