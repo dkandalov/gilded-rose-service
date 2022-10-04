@@ -12,24 +12,6 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.jdbc.core.JdbcTemplate
 
-class App(env: String) {
-    val config = Config.load(env)
-    val dataSource = config.dbConfig.toDataSource()
-    private val repository = DbItemsRepository(dataSource)
-    private val service = GildedRoseService(repository)
-    private val server = WebController(config, service)
-        .asServer(Undertow(config.port))
-
-    fun start() {
-        server.start()
-    }
-
-    fun stop() {
-        server.stop()
-        dataSource.close()
-    }
-}
-
 class WebControllerIntegrationTest {
     private val app = App(env = "test")
     private val jdbc = JdbcTemplate(app.dataSource)
