@@ -1,8 +1,5 @@
 package com.gildedrose.domain
 
-import org.springframework.stereotype.Service
-
-@Service
 class GildedRose {
     fun update(items: List<Item>) {
         items.forEach { item ->
