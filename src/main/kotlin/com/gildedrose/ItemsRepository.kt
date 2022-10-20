@@ -2,7 +2,6 @@ package com.gildedrose
 
 import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
@@ -12,8 +11,9 @@ interface ItemsRepository {
 }
 
 @Repository
-class DbItemsRepository : ItemsRepository {
-    @Autowired private lateinit var jdbc: JdbcTemplate
+class DbItemsRepository(
+    private val jdbc: JdbcTemplate
+) : ItemsRepository {
     private val logger = newLogger()
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {
