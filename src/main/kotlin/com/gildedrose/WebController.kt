@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class WebController(
-    @Autowired val repository: ItemsRepository,
-    @Autowired val gildedRoseService: GildedRoseService = GildedRoseService(repository)
+    @Autowired private val repository: ItemsRepository,
 ) {
+    private val gildedRoseService = GildedRoseService(repository)
+
     @GetMapping("/items")
     fun items(@RequestParam date: LocalDate): List<Item> {
         return gildedRoseService.items(date)
