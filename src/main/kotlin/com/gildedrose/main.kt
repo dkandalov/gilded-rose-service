@@ -4,8 +4,6 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.*
 
 fun main() {
@@ -29,10 +27,6 @@ class App(env: String) {
     }
 }
 
-@SpringBootApplication
-class GildedRoseApplication
-
-@ConfigurationProperties(prefix = "gildedrose")
 class Config(
     var users: List<String> = emptyList(),
     var port: Int = 0,

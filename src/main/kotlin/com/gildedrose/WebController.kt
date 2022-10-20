@@ -2,16 +2,9 @@ package com.gildedrose
 
 import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import javax.sql.DataSource
-
 import org.http4k.core.Body
-import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method.GET
-import org.http4k.core.NoOp
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
@@ -58,18 +51,3 @@ private val kotlinxLocalDate = BiDiMapping<String, LocalDate>(
     asOut = { LocalDate.parse(it) },
     asIn = { it.toString() }
 )
-
-
-@RestController
-class SpringWebController(
-    dataSource: DataSource,
-    repository: ItemsRepository = DbItemsRepository(dataSource)
-) {
-    private val gildedRoseService = GildedRoseService(repository)
-
-    @GetMapping("/items")
-    fun items(@RequestParam date: LocalDate): List<Item> {
-        return gildedRoseService.items(date)
-    }
-}
-
