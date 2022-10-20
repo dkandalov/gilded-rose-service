@@ -8,15 +8,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.ActiveProfiles
 
 class DbItemsRepositoryTest {
     // TODO read from file
     private val dataSource = HikariDataSource(
         HikariConfig().apply {
             jdbcUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+            username = "sa"
+            password = ""
         }
     )
     private val jdbc = JdbcTemplate(dataSource)
