@@ -2,7 +2,6 @@ package com.gildedrose
 
 import com.gildedrose.domain.Item
 import kotlinx.datetime.LocalDate
-import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -15,7 +14,7 @@ interface ItemsRepository {
 @Repository
 class DbItemsRepository : ItemsRepository {
     @Autowired private lateinit var jdbc: JdbcTemplate
-    @Autowired private val logger: Logger? = null
+    private val logger = newLogger()
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {
         val rowMapper = RowMapper { resultSet, _ ->
@@ -25,7 +24,7 @@ class DbItemsRepository : ItemsRepository {
                 quality = resultSet.getInt(3)
             )
             val createdDate = LocalDate.parse(resultSet.getString(4))
-            logger?.info("Loaded item $item")
+            logger.info("Loaded item $item")
             Pair(createdDate, item)
         }
         return jdbc.query(
