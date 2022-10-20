@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ItemsRepositoryImplTest {
+class DbItemsRepositoryTest {
     @Autowired private lateinit var jdbc: JdbcTemplate
     @Autowired private lateinit var repository: ItemsRepository
 
