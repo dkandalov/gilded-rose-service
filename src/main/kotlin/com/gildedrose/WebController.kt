@@ -10,7 +10,7 @@ import javax.sql.DataSource
 @RestController
 class WebController(
     dataSource: DataSource,
-    repository: ItemsRepository = DbItemsRepository(dataSource),
+    repository: ItemsRepository = DbItemsRepository(dataSource)
 ) {
     private val gildedRoseService = GildedRoseService(repository)
 

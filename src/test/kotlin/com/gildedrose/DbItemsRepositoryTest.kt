@@ -1,8 +1,6 @@
 package com.gildedrose
 
 import com.gildedrose.domain.Item
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import kotlinx.datetime.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -11,14 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.jdbc.core.JdbcTemplate
 
 class DbItemsRepositoryTest {
-    // TODO read from file
-    private val dataSource = HikariDataSource(
-        HikariConfig().apply {
-            jdbcUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
-            username = "sa"
-            password = ""
-        }
-    )
+    private val dataSource = Config.load("test").dbConfig.toDataSource()
     private val jdbc = JdbcTemplate(dataSource)
     private val repository = DbItemsRepository(dataSource)
 
