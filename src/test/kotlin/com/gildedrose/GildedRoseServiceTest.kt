@@ -13,8 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 
 @SpringBootTest
 class GildedRoseServiceTest {
-    @Autowired private lateinit var service: GildedRoseService
     @MockBean private lateinit var itemsRepository: ItemsRepository
+    @Autowired private lateinit var service: GildedRoseService
 
     @BeforeEach
     fun setup() {
