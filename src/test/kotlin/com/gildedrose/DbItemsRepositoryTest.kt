@@ -17,7 +17,7 @@ import javax.sql.DataSource
 class DbItemsRepositoryTest {
     @Autowired private lateinit var dataSource: DataSource
     private val jdbc by lazy { JdbcTemplate(dataSource) }
-    private val repository by lazy { DbItemsRepository(jdbc) }
+    private val repository by lazy { DbItemsRepository(dataSource) }
 
     @BeforeEach
     fun setup() {

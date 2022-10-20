@@ -5,15 +5,15 @@ import kotlinx.datetime.LocalDate
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
+import javax.sql.DataSource
 
 interface ItemsRepository {
     fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>>
 }
 
 @Repository
-class DbItemsRepository(
-    private val jdbc: JdbcTemplate
-) : ItemsRepository {
+class DbItemsRepository(dataSource: DataSource) : ItemsRepository {
+    private val jdbc = JdbcTemplate(dataSource)
     private val logger = newLogger()
 
     override fun loadItems(createdOnOrBefore: LocalDate): List<Pair<LocalDate, Item>> {
