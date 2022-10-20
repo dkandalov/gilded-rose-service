@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.ActiveProfiles
+import javax.sql.DataSource
 
 @SpringBootTest
 @ActiveProfiles("test")
 class DbItemsRepositoryTest {
-    @Autowired private lateinit var jdbc: JdbcTemplate
-    @Autowired private lateinit var repository: ItemsRepository
+    @Autowired private lateinit var dataSource: DataSource
+    private val jdbc by lazy { JdbcTemplate(dataSource) }
+    private val repository by lazy { DbItemsRepository(jdbc) }
 
     @BeforeEach
     fun setup() {
